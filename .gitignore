@@ -1,0 +1,43 @@
+# Flutter/Dart
+flutter_shell_orchestrator/.dart_tool/
+flutter_shell_orchestrator/.flutter-plugins
+flutter_shell_orchestrator/.flutter-plugins-dependencies
+flutter_shell_orchestrator/.packages
+flutter_shell_orchestrator/build/
+flutter_shell_orchestrator/pubspec.lock
+flutter_shell_orchestrator/.idea/
+flutter_shell_orchestrator/.vscode/
+
+# iOS
+flutter_shell_orchestrator/ios/Pods/
+flutter_shell_orchestrator/ios/.symlinks/
+flutter_shell_orchestrator/ios/Flutter/Flutter.framework
+flutter_shell_orchestrator/ios/Flutter/Flutter.podspec
+flutter_shell_orchestrator/ios/.generated/
+flutter_shell_orchestrator/ios/Podfile.lock
+flutter_shell_orchestrator/ios/Runner.xcworkspace/xcshareddata/
+
+# Android
+flutter_shell_orchestrator/android/.gradle/
+flutter_shell_orchestrator/android/app/build/
+flutter_shell_orchestrator/android/build/
+flutter_shell_orchestrator/android/local.properties
+flutter_shell_orchestrator/android/.idea/
+flutter_shell_orchestrator/android/captures/
+
+# Angular/Node
+angular_mfe_ui/node_modules/
+angular_mfe_ui/dist/
+angular_mfe_ui/.angular/
+angular_mfe_ui/package-lock.json
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs
+*.log
