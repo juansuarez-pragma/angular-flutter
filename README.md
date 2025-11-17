@@ -10,6 +10,7 @@ Prueba de Concepto (PoC) de una arquitectura híbrida móvil con Flutter como Sh
 
 - [Arquitectura](#-arquitectura)
 - [Principios de Diseño](#-principios-de-diseño)
+- [Demo en Video](#-demo-en-video)
 - [Inicio Rápido](#-inicio-rápido)
 - [Comunicación Bidireccional](#-comunicación-bidireccional)
 - [Plataformas Soportadas](#-plataformas-soportadas)
@@ -62,6 +63,29 @@ Prueba de Concepto (PoC) de una arquitectura híbrida móvil con Flutter como Sh
 - ✅ NO maneja estado complejo
 - ✅ NO hace llamadas HTTP
 - ✅ Delega todo al Shell vía puente JavaScript
+
+---
+
+## 🎥 Demo en Video
+
+### Prueba en Dispositivo Android Real
+
+> **Video demostrativo:** Comunicación bidireccional funcionando en Android
+
+https://github.com/user-attachments/assets/demo-android.mov
+
+**Lo que se muestra en el video:**
+1. ✅ Aplicación Flutter cargando el MFE de Angular en WebView
+2. ✅ Interfaz bancaria profesional con fondo blanco
+3. ✅ Status badge mostrando "Conectado"
+4. ✅ Formulario de actualización de nombre (arriba)
+5. ✅ Avatar con iniciales del usuario (abajo, alineado izquierda)
+6. ✅ Actualización de nombre en tiempo real
+7. ✅ Comunicación Flutter ↔ Angular funcionando perfectamente
+
+**Dispositivo de prueba:** Emulador/Dispositivo Android
+**Fecha de grabación:** 2025-11-17
+**Versión:** PoC v1.0
 
 ---
 

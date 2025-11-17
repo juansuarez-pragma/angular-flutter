@@ -122,6 +122,14 @@ flutter+angular/
 
 ---
 
+## 🎥 Demo en Video
+
+**Video demostrativo en Android:** [assets/videos/demo-android.mov](assets/videos/demo-android.mov)
+
+Muestra la comunicación bidireccional funcionando perfectamente con la nueva interfaz bancaria profesional.
+
+---
+
 ## 🚀 Inicio Rápido (2 Comandos)
 
 **Terminal 1 - Angular:**
