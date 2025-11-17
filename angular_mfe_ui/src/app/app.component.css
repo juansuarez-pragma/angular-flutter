@@ -92,65 +92,24 @@
   border: 1px solid var(--border);
   border-radius: 8px;
   box-shadow: var(--shadow-md);
-  max-width: 480px;
+  max-width: 580px;
   width: 100%;
   overflow: hidden;
 }
 
-/* Avatar Section */
-.avatar-section {
-  padding: 48px 32px 32px;
-  text-align: center;
-  background: linear-gradient(180deg, var(--gray-50) 0%, var(--white) 100%);
-  border-bottom: 1px solid var(--border);
-}
-
-.avatar {
-  width: 96px;
-  height: 96px;
-  border-radius: 50%;
-  background: var(--primary);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 20px;
-  box-shadow: var(--shadow-md);
-  border: 3px solid var(--white);
-}
-
-.avatar-text {
-  font-size: 2rem;
-  font-weight: 700;
-  color: var(--white);
-  letter-spacing: 2px;
-}
-
-.user-name {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: var(--gray-900);
-  margin-bottom: 6px;
-  letter-spacing: -0.5px;
-}
-
-.user-label {
-  font-size: 0.8125rem;
-  font-weight: 500;
-  color: var(--gray-600);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-/* Divider */
-.divider {
-  height: 1px;
-  background: var(--border);
-}
-
-/* Update Section */
+/* Update Section - AHORA ESTÁ PRIMERO */
 .update-section {
   padding: 32px;
   background: var(--white);
+  border-bottom: 1px solid var(--border);
+}
+
+.section-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--gray-900);
+  margin-bottom: 24px;
+  letter-spacing: -0.3px;
 }
 
 .input-label {
@@ -252,6 +211,66 @@
   font-weight: 500;
 }
 
+/* Divider */
+.divider {
+  height: 1px;
+  background: var(--border);
+}
+
+/* Avatar Section - AHORA ESTÁ SEGUNDO Y ALINEADO A LA IZQUIERDA */
+.avatar-section {
+  padding: 32px;
+  background: var(--gray-50);
+}
+
+.avatar-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: var(--shadow-md);
+  border: 2px solid var(--white);
+}
+
+.avatar-text {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--white);
+  letter-spacing: 1px;
+}
+
+.user-info {
+  flex: 1;
+  text-align: left;
+}
+
+.user-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--gray-600);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 4px;
+}
+
+.user-name {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--gray-900);
+  letter-spacing: -0.3px;
+  margin: 0;
+}
+
 /* Footer */
 .footer {
   position: absolute;
@@ -277,25 +296,33 @@
     max-width: 100%;
   }
 
+  .update-section {
+    padding: 24px;
+  }
+
+  .section-title {
+    font-size: 1.125rem;
+  }
+
   .avatar-section {
-    padding: 40px 24px 24px;
+    padding: 24px;
+  }
+
+  .avatar-row {
+    gap: 12px;
   }
 
   .avatar {
-    width: 80px;
-    height: 80px;
+    width: 56px;
+    height: 56px;
   }
 
   .avatar-text {
-    font-size: 1.75rem;
-  }
-
-  .user-name {
     font-size: 1.25rem;
   }
 
-  .update-section {
-    padding: 24px;
+  .user-name {
+    font-size: 1.125rem;
   }
 
   .status-badge {
@@ -352,33 +379,21 @@
   opacity: 0.6;
 }
 
-/* Separación visual clara */
+/* Efecto hover sutil en avatar */
+.avatar {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.avatar:hover {
+  transform: scale(1.05);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Mejora visual en la separación de secciones */
 .update-section {
   position: relative;
 }
 
-/* Sombra interna sutil en el card */
-.main-card {
+.avatar-section {
   position: relative;
-}
-
-.main-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--border), transparent);
-  opacity: 0.5;
-}
-
-/* Efecto hover en el avatar */
-.avatar {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.avatar:hover {
-  transform: scale(1.02);
-  box-shadow: var(--shadow-lg);
 }

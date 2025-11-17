@@ -9,21 +9,11 @@
 
   <!-- Main Card -->
   <div class="main-card">
-    <!-- Avatar Section -->
-    <div class="avatar-section">
-      <div class="avatar">
-        <span class="avatar-text">{{ getInitials(userName) }}</span>
-      </div>
-      <h1 class="user-name">{{ userName }}</h1>
-      <p class="user-label">Nombre de Usuario</p>
-    </div>
-
-    <!-- Divider -->
-    <div class="divider"></div>
-
-    <!-- Update Section -->
+    <!-- Update Section - PRIMERO -->
     <div class="update-section">
-      <label class="input-label">Actualizar nombre</label>
+      <h2 class="section-title">Actualizar Nombre</h2>
+
+      <label class="input-label">Nombre completo</label>
       <div class="input-wrapper">
         <input
           type="text"
@@ -46,6 +36,22 @@
       <p class="helper-text" *ngIf="!isRunningInFlutter">
         Esta función requiere estar conectado a Flutter
       </p>
+    </div>
+
+    <!-- Divider -->
+    <div class="divider"></div>
+
+    <!-- Avatar Section - SEGUNDO -->
+    <div class="avatar-section">
+      <div class="avatar-row">
+        <div class="avatar">
+          <span class="avatar-text">{{ getInitials(userName) }}</span>
+        </div>
+        <div class="user-info">
+          <p class="user-label">Usuario actual</p>
+          <h1 class="user-name">{{ userName }}</h1>
+        </div>
+      </div>
     </div>
   </div>
 
