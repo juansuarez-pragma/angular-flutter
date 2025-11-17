@@ -1,532 +1,291 @@
 # 📋 Contexto del Proyecto - Shell Orchestrator PoC
 
-## 🎯 Resumen del Proyecto
+## 🎯 Resumen Ejecutivo
 
 **Nombre:** Flutter Shell Orchestrator + Angular MFE
 **Tipo:** Proof of Concept (PoC)
-**Objetivo:** Demostrar comunicación bidireccional entre un Shell Orquestador Flutter y un Micro Frontend Angular cargado en WebView
-**Estado:** ✅ **100% FUNCIONAL EN ANDROID**
-**Fecha:** 2025-11-11
+**Objetivo:** Demostrar comunicación bidireccional entre un Shell Orquestador Flutter y un Micro Frontend Angular
+**Estado:** ✅ **Funcional en Android e iOS**
+**Última actualización:** 2025-11-17
 
 ---
 
-## 🏗️ Arquitectura
-
-### Patrón: Shell Orchestrator
+## 📐 Arquitectura en 60 Segundos
 
 ```
-┌─────────────────────────────────────────────────────┐
-│         Flutter Shell Orquestador                    │
-│  ┌───────────────────────────────────────────────┐  │
-│  │              AppBloc (BLoC Pattern)            │  │
-│  │  - Maneja estado global                        │  │
-│  │  - Gestiona lógica de negocio                  │  │
-│  │  - Procesa eventos                             │  │
-│  └───────────────────────────────────────────────┘  │
-│                        ↕                             │
-│  ┌───────────────────────────────────────────────┐  │
-│  │           BridgeService                        │  │
-│  │  - Comunicación bidireccional                  │  │
-│  │  - JavaScript Handler                          │  │
-│  │  - CustomEvent dispatcher                      │  │
-│  └───────────────────────────────────────────────┘  │
-│                        ↕                             │
-│  ┌───────────────────────────────────────────────┐  │
-│  │         InAppWebView                           │  │
-│  │  ┌─────────────────────────────────────────┐  │  │
-│  │  │    Angular MFE (Micro Frontend)         │  │  │
-│  │  │  - UI Pura (sin lógica de negocio)     │  │  │
-│  │  │  - Standalone Components                │  │  │
-│  │  │  - BridgeService para comunicación      │  │  │
-│  │  └─────────────────────────────────────────┘  │  │
-│  └───────────────────────────────────────────────┘  │
-└─────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────┐
+│    Flutter Shell (Cerebro)              │
+│    ├─ BLoC Pattern (Estado)             │
+│    ├─ go_router (Navegación)            │
+│    └─ flutter_inappwebview (WebView)    │
+│              ↕ JavaScript Bridge        │
+│    ┌────────────────────────────────┐   │
+│    │   Angular MFE (Vista)          │   │
+│    │   ├─ UI Pura                   │   │
+│    │   ├─ RxJS (Reactivo)           │   │
+│    │   └─ BridgeService             │   │
+│    └────────────────────────────────┘   │
+└─────────────────────────────────────────┘
 ```
+
+**Principio fundamental:** Flutter maneja lógica de negocio, Angular solo renderiza UI.
 
 ---
 
 ## 📁 Estructura del Proyecto
 
-### Directorio Raíz
 ```
-/Users/juancarlossuarezmarin/Desktop/front/flutter+angular/
-├── flutter_shell_orchestrator/    # Flutter Shell
-├── angular_mfe_ui/                 # Angular MFE
-├── PROJECT_CONTEXT.md             # Este archivo
-├── CHANGES_SUMMARY.md             # Resumen de cambios
-├── ARCHITECTURE.md                # Documentación de arquitectura detallada
-└── RUN_NOW.md                     # Guía rápida de ejecución
-```
-
-### Flutter Shell Orchestrator
-
-```
-flutter_shell_orchestrator/
-├── lib/
-│   ├── main.dart                                    # Entry point
-│   ├── app.dart                                     # Root widget con providers
-│   ├── core/
-│   │   ├── bloc/
-│   │   │   ├── app_bloc.dart                       # BLoC principal
-│   │   │   ├── app_event.dart                      # Eventos (UpdateNameEvent)
-│   │   │   └── app_state.dart                      # Estado (userName, lastUpdated)
-│   │   └── services/
-│   │       └── bridge_service.dart                 # Servicio de comunicación
-│   └── presentation/
-│       └── screens/
-│           └── webview_host_screen.dart            # Pantalla con WebView
-├── android/                                         # Configuración Android
-├── ios/                                             # Configuración iOS
-├── pubspec.yaml                                     # Dependencias Flutter
-└── test/                                            # Tests
+flutter+angular/
+├── flutter_shell_orchestrator/    # Shell Flutter (Android/iOS)
+├── angular_mfe_ui/                 # MFE Angular (UI pura)
+├── README.md                       # Punto de entrada principal
+├── QUICKSTART.md                   # Guía de inicio rápido
+├── ARCHITECTURE.md                 # Documentación técnica detallada
+├── CLAUDE.md                       # Instrucciones para Claude Code
+└── PROJECT_CONTEXT.md              # Este archivo (índice navegable)
 ```
 
-**Dependencias Flutter:**
-```yaml
-dependencies:
-  flutter_bloc: ^8.1.3
-  equatable: ^2.0.5
-  go_router: ^13.0.0
-  flutter_inappwebview: ^6.0.0
-  dio: ^5.4.0
-```
+---
 
-### Angular MFE UI
+## 📚 Guía de Navegación
 
-```
-angular_mfe_ui/
-├── src/
-│   └── app/
-│       ├── app.component.ts                        # Componente principal
-│       ├── app.component.html                      # Template UI
-│       ├── app.component.css                       # Estilos
-│       ├── app.config.ts                           # Configuración
-│       └── services/
-│           └── bridge.service.ts                   # Servicio de comunicación
-├── package.json                                     # Dependencias npm
-└── angular.json                                     # Configuración Angular
-```
+### ¿Quieres...?
 
-**Stack Angular:**
-- Angular 17+
+#### 🚀 Ejecutar el proyecto rápidamente
+→ Lee **[QUICKSTART.md](QUICKSTART.md)**
+- Prerrequisitos
+- Comandos de ejecución (2 terminales)
+- Troubleshooting básico
+
+#### 📖 Entender la arquitectura completa
+→ Lee **[ARCHITECTURE.md](ARCHITECTURE.md)**
+- Componentes detallados
+- Protocolo de comunicación
+- Flujos de datos paso a paso
+- Seguridad y performance
+- Testing y monitoreo
+
+#### 🔧 Desarrollar y contribuir
+→ Lee **[CLAUDE.md](CLAUDE.md)**
+- Comandos de desarrollo
+- Convenciones del proyecto
+- Flujo de trabajo
+- Problemas comunes
+
+#### 📱 Trabajar con Flutter Shell
+→ Lee **[flutter_shell_orchestrator/README.md](flutter_shell_orchestrator/README.md)**
+- Configuración específica de Flutter
+- BLoC pattern
+- Bridge service
+- Comandos de build
+
+#### 🎨 Trabajar con Angular MFE
+→ Lee **[angular_mfe_ui/README.md](angular_mfe_ui/README.md)**
+- Configuración específica de Angular
+- Principios de diseño (UI pura)
+- Bridge service
+- Modo standalone
+
+---
+
+## 🔑 Información Clave
+
+### Plataformas Soportadas
+
+| Plataforma | Estado | Notas |
+|------------|--------|-------|
+| **Android** | ✅ 100% Funcional | Usar `10.0.2.2:4200` en emulador |
+| **iOS** | ⚠️ Compilación con issues | Errores Xcode (no crítico) |
+
+**Nota:** Solo plataformas móviles. `flutter_inappwebview` no funciona en web ni desktop.
+
+### Stack Tecnológico
+
+**Flutter:**
+- `flutter_bloc: ^8.1.3` - Estado
+- `go_router: ^13.0.0` - Navegación
+- `flutter_inappwebview: ^6.0.0` - WebView
+- `dio: ^5.4.0` - HTTP
+
+**Angular:**
+- `@angular/core: ^17.0.0` - Framework
+- `rxjs: ~7.8.0` - Programación reactiva
 - Standalone Components (sin NgModules)
-- RxJS para reactive programming
-- TypeScript
+
+### Flujos Implementados
+
+1. **Inicialización (Flutter → Web)**
+   Flutter envía `userName` inicial cuando el WebView carga
+
+2. **Actualizar Nombre (Web ↔ Flutter ↔ Web)**
+   Angular envía nuevo nombre → Flutter actualiza BLoC → Notifica a Angular
 
 ---
 
-## 🔄 Flujos Implementados
+## 🚀 Inicio Rápido (2 Comandos)
 
-### Flujo 1: Inicialización (Flutter → Web)
-
-**Propósito:** Enviar datos iniciales de Flutter a Angular cuando carga el WebView
-
-```
-1. Flutter: AppBloc se inicializa con userName="Usuario Inicial"
-   ↓
-2. Flutter: WebView termina de cargar (onLoadStop)
-   ↓
-3. Flutter: BridgeService.sendDataUpdate() ejecuta JavaScript
-   ↓
-4. JavaScript: CustomEvent('flutterDataUpdate', {userName, timestamp})
-   ↓
-5. Angular: document.addEventListener() recibe el evento
-   ↓
-6. Angular: bridgeService.userName$.next(userName)
-   ↓
-7. Angular: AppComponent actualiza this.userName
-   ↓
-8. Angular: UI se renderiza con el nombre recibido ✅
-```
-
-**Logs de éxito:**
-```
-I/flutter: BridgeService: Datos enviados al MFE - userName: Usuario Inicial
-I/chromium: Angular: Nombre de usuario actualizado: Usuario Inicial
-```
-
-### Flujo 2: Actualizar Nombre (Web ↔ Flutter ↔ Web)
-
-**Propósito:** Actualización bidireccional del nombre desde Angular
-
-```
-1. Usuario escribe nombre en input de Angular
-   ↓
-2. Angular: onClick() → bridgeService.updateName(newName)
-   ↓
-3. Angular: flutter_inappwebview.callHandler('AppBridge', {event, payload})
-   ↓
-4. Flutter: addJavaScriptHandler recibe el mensaje
-   ↓
-5. Flutter: Valida estructura del mensaje
-   ↓
-6. Flutter: appBloc.add(UpdateNameEvent(newName))
-   ↓
-7. Flutter: AppBloc._onUpdateName() procesa evento
-   ↓
-8. Flutter: emit(state.copyWith(userName: newName))
-   ↓
-9. Flutter: BlocListener detecta cambio de estado
-   ↓
-10. Flutter: bridgeService.sendDataUpdate(userName)
-    ↓
-11. JavaScript: CustomEvent('flutterDataUpdate') se dispara
-    ↓
-12. Angular: Recibe evento y actualiza UI ✅
-```
-
-**Logs de éxito:**
-```
-I/chromium: Angular: Usuario solicita actualizar nombre a: juan
-I/flutter: AppBridge: Mensaje recibido desde Web: {event: UPDATE_NAME, payload: {newName: juan}}
-I/flutter: AppBloc: Actualizando nombre a: juan
-I/chromium: Angular: Nombre de usuario actualizado: juan
-```
-
----
-
-## 🔧 Detalles Técnicos Importantes
-
-### 1. JavaScript Bridge (InAppWebView)
-
-**En Flutter:**
-```dart
-// Registrar handler
-controller.addJavaScriptHandler(
-  handlerName: 'AppBridge',
-  callback: (args) { /* procesar mensaje */ }
-);
-
-// Enviar datos a Angular
-await controller.evaluateJavascript(source: '''
-  const event = new CustomEvent('flutterDataUpdate', {
-    detail: ${jsonEncode(payload)}
-  });
-  document.dispatchEvent(event);
-''');
-```
-
-**En Angular:**
-```typescript
-// Recibir datos de Flutter
-document.addEventListener('flutterDataUpdate', (event: CustomEvent) => {
-  this.userName$.next(event.detail.userName);
-});
-
-// Enviar datos a Flutter
-(window as any).flutter_inappwebview.callHandler('AppBridge', message);
-```
-
-### 2. BLoC Pattern (Flutter)
-
-**Estado:**
-```dart
-class AppState extends Equatable {
-  final String userName;
-  final DateTime lastUpdated;
-}
-```
-
-**Eventos:**
-```dart
-class UpdateNameEvent extends AppEvent {
-  final String newName;
-}
-```
-
-**BLoC:**
-```dart
-class AppBloc extends Bloc<AppEvent, AppState> {
-  AppBloc() : super(AppState.initial()) {
-    on<UpdateNameEvent>(_onUpdateName);
-  }
-
-  void _onUpdateName(UpdateNameEvent event, Emitter<AppState> emit) {
-    emit(state.copyWith(userName: event.newName));
-  }
-}
-```
-
-### 3. URLs y Networking
-
-**Para Android Emulator:**
-- URL Angular: `http://10.0.2.2:4200`
-- Razón: `10.0.2.2` es la IP especial que apunta al host desde el emulador
-- `localhost` NO funciona en emulador Android
-
-**Para iOS Simulator:**
-- URL Angular: `http://localhost:4200`
-- `localhost` funciona correctamente en iOS
-
-**Permisos requeridos:**
-- Android: `INTERNET` permission en `AndroidManifest.xml`
-- iOS: `NSAppTransportSecurity` permitiendo `localhost` en `Info.plist`
-
----
-
-## ⚠️ Problemas Comunes y Soluciones
-
-### 1. ❌ AppBridge no disponible
-
-**Problema:** Angular no detectaba el bridge de Flutter
-
-**Error:**
-```
-Angular: AppBridge no disponible (ejecutando fuera de Flutter)
-```
-
-**Causa:** Angular buscaba `window.AppBridge.postMessage()` pero InAppWebView expone `window.flutter_inappwebview.callHandler()`
-
-**Solución:** Actualizar `angular_mfe_ui/src/app/services/bridge.service.ts`:
-```typescript
-// ANTES (incorrecto):
-(window as any).AppBridge.postMessage(JSON.stringify(message));
-
-// DESPUÉS (correcto):
-(window as any).flutter_inappwebview.callHandler('AppBridge', message);
-```
-
-### 3. ❌ iOS No Compila
-
-**Problema:** Errores de Swift Compiler con CoreFoundation en Xcode
-
-**Intentos de solución:**
-- `flutter clean`
-- Eliminación de DerivedData
-- `pod install`
-- Múltiples limpiezas
-
-**Estado:** No resuelto, pero no crítico porque Android funciona perfectamente
-
-**Alternativa:** Usar emulador Android (100% funcional)
-
-### 4. ❌ WebView en blanco en Chrome
-
-**Problema:** WebView mostraba pantalla en blanco
-
-**Causa:** `flutter_inappwebview` NO soporta Flutter Web ni desktop, solo plataformas móviles nativas
-
-**Solución:** Usar Android o iOS únicamente
-
----
-
-## 🚀 Cómo Ejecutar la PoC
-
-### Requisitos Previos
-- Flutter SDK instalado
-- Node.js y npm instalados
-- Emulador Android o iOS funcionando (Android preferido)
-
-### Paso 1: Iniciar Angular MFE
-
+**Terminal 1 - Angular:**
 ```bash
-cd angular_mfe_ui
-npm install
-npm start
+cd angular_mfe_ui && npm install && npm start
 ```
 
-Verificar: `http://localhost:4200` debe mostrar la app Angular
-
-### Paso 2: Iniciar Flutter Shell (Android)
-
+**Terminal 2 - Flutter:**
 ```bash
-cd flutter_shell_orchestrator
-flutter run -d emulator-5554  # o el ID de tu emulador
+cd flutter_shell_orchestrator && flutter pub get && flutter run
 ```
 
-### Paso 3: Probar la Funcionalidad
-
-1. ✅ Verificar que aparece "Usuario Inicial" en la UI
-2. ✅ Escribir un nombre en el input
-3. ✅ Presionar "Actualizar Nombre"
-4. ✅ Verificar que el nombre se actualiza en la UI
+✅ Verifica que "Usuario Inicial" aparece en la UI
+✅ Cambia el nombre y verifica que se actualiza
 
 ---
 
-## 📊 Estado Actual
-
-### ✅ Funcionando
-- Compilación Flutter en Android
-- Carga de Angular en WebView
-- Comunicación Flutter → Web (CustomEvent)
-- Comunicación Web → Flutter (callHandler)
-- Actualización reactiva de UI
-- BLoC pattern funcionando
-- Hot reload en ambas apps
-
-### ⚠️ Conocido pero No Crítico
-- iOS no compila (errores de Xcode)
-- Flutter Web no soporta InAppWebView
-
-### 🎯 Plataformas Soportadas
-
-**Esta PoC está diseñada para aplicaciones móviles únicamente:**
-- ✅ **Android** - 100% funcional
-- ⚠️ **iOS** - Con errores de compilación (no crítico para PoC)
-
-**Nota:** Flutter Web y desktop (macOS, Windows, Linux) no están soportados porque `InAppWebView` solo funciona en plataformas móviles nativas.
-
----
-
-## 🔍 Comandos Útiles
+## 🔧 Comandos Esenciales
 
 ### Flutter
 ```bash
-# Limpiar proyecto
-flutter clean
-
-# Obtener dependencias
-flutter pub get
-
-# Ver dispositivos disponibles
-flutter devices
-
-# Ejecutar en Android
-flutter run -d emulator-5554
-
-# Ver logs
-flutter logs
-
-# Análisis estático
-flutter analyze
+flutter devices           # Ver dispositivos disponibles
+flutter run               # Ejecutar en dispositivo disponible
+flutter run -d <id>       # Ejecutar en dispositivo específico
+flutter logs              # Ver logs en tiempo real
+flutter clean             # Limpiar build
 ```
 
 ### Angular
 ```bash
-# Instalar dependencias
-npm install
-
-# Iniciar servidor
-npm start
-
-# Build de producción
-npm run build
-```
-
-### Android
-```bash
-# Ver dispositivos
-adb devices
-
-# Ver logs en tiempo real
-adb logcat | grep flutter
+npm start                 # Servidor de desarrollo (port 4200)
+npm run build             # Build de producción
+npm test                  # Ejecutar tests
 ```
 
 ---
 
-## 📝 Archivos de Configuración Clave
+## ⚠️ Troubleshooting Rápido
 
-### Flutter: `pubspec.yaml`
-- Define dependencias
-- Sin `local_auth` (eliminado)
-- 5 dependencias principales
+### "Cannot connect to localhost:4200"
+- Verifica que Angular esté corriendo: `npm start`
+- En Android emulator usa `10.0.2.2:4200` en el código
 
-### Angular: `package.json`
-- Angular 17+
-- RxJS
-- TypeScript
+### "AppBridge is undefined"
+- El WebView aún no cargó completamente
+- Espera unos segundos o presiona `r` (hot reload)
 
-### Android: `AndroidManifest.xml`
-- Permiso `INTERNET`
-- `usesCleartextTraffic="true"` para localhost
+### "No devices available"
+- Ejecuta `flutter devices` para ver opciones
+- Inicia un emulador/simulador
 
-### iOS: `Info.plist`
-- `NSAppTransportSecurity` para localhost
+**Más soluciones:** Ver [QUICKSTART.md - Troubleshooting](QUICKSTART.md#-solución-rápida-de-problemas)
 
 ---
 
-## 🎓 Conceptos Clave
+## 🎓 Conceptos Importantes
 
 ### 1. Shell Orchestrator Pattern
-- Shell: Flutter app que orquesta todo
-- MFE: Angular app con solo UI
-- Separación clara de responsabilidades
+Flutter es el "cerebro" que controla todo. Angular es solo una "vista tonta" que renderiza UI.
 
-### 2. BLoC Pattern
-- Business Logic Component
-- Separación de UI y lógica
-- Estado inmutable con Equatable
-- Streams para reactive updates
+### 2. JavaScript Bridge
+Comunicación bidireccional entre Flutter (nativo) y Angular (web):
+- **Flutter → Angular:** `evaluateJavascript()` + `CustomEvent`
+- **Angular → Flutter:** `callHandler()` + Message passing
 
-### 3. Micro Frontend
-- UI aislada sin lógica de negocio
-- Comunicación via bridge
-- Independiente del shell
+### 3. BLoC Pattern (Flutter)
+```
+Event → BLoC → State Change → UI Update → Bridge Notification
+```
 
-### 4. JavaScript Bridge
-- Puente de comunicación nativo ↔ web
-- Mensajes bidireccionales
-- Validación de seguridad
+### 4. Micro Frontend (Angular)
+Angular MFE **NUNCA** debe:
+- ❌ Tener lógica de negocio
+- ❌ Hacer llamadas HTTP
+- ❌ Gestionar estado complejo
+- ✅ Solo renderizar UI y comunicarse con Flutter
 
 ---
 
-## 📚 Documentación Adicional
+## 📞 Archivos de Configuración Clave
 
-- `ARCHITECTURE.md` - Arquitectura detallada y diagramas de flujo de datos
-- `CHANGES_SUMMARY.md` - Resumen completo de cambios
-- `RUN_NOW.md` - Guía rápida de ejecución
+### URLs según plataforma
+```dart
+// flutter_shell_orchestrator/lib/presentation/screens/webview_host_screen.dart
+
+// Android Emulator
+static const String _mfeUrl = 'http://10.0.2.2:4200';
+
+// iOS Simulator
+static const String _mfeUrl = 'http://localhost:4200';
+
+// Dispositivo físico
+static const String _mfeUrl = 'http://192.168.1.X:4200'; // IP local
+```
+
+### Permisos nativos
+- **Android:** `AndroidManifest.xml` - Permiso `INTERNET`, `usesCleartextTraffic`
+- **iOS:** `Info.plist` - `NSAppTransportSecurity` para localhost
 
 ---
 
 ## 🔐 Consideraciones de Seguridad
 
-### Validación de Mensajes
-```dart
-// Validar origen y estructura
-if (event == null || payload == null) {
-  return {'error': 'Invalid message'};
-}
-```
+Ver detalles completos en [ARCHITECTURE.md - Seguridad](ARCHITECTURE.md#consideraciones-de-seguridad)
 
-### Producción
-- Validar origen real del mensaje
-- Implementar whitelist de eventos permitidos
-- Encriptar datos sensibles
-- Rate limiting en mensajes
-
----
-
-## 🧪 Tests
-
-**Estado actual:** Sin tests implementados
-
-**Tests recomendados:**
-- Unit tests para BLoC
-- Unit tests para BridgeService
-- Integration tests para comunicación
-- Widget tests para UI
+- ✅ Validación de mensajes en Flutter
+- ✅ Whitelist de eventos permitidos
+- ⚠️ Implementar rate limiting en producción
+- ⚠️ Encriptar datos sensibles en producción
 
 ---
 
 ## 🔜 Próximos Pasos Potenciales
 
-1. Resolver problemas de iOS
-2. Agregar más flujos de comunicación
-3. Implementar navegación entre MFEs
-4. Agregar state persistence
-5. Implementar error handling robusto
-6. Agregar tests automatizados
-7. Performance optimization
-8. Documentación de API completa
+- Resolver issues de compilación iOS
+- Agregar más flujos de comunicación
+- Implementar navegación entre múltiples MFEs
+- Agregar tests automatizados
+- Performance optimization
+- State persistence
 
 ---
 
-## 💡 Tips para Nuevos Desarrolladores
+## 💡 Tips para Desarrolladores
 
-1. **Siempre inicia Angular primero** antes de Flutter
-2. **En Android emulator** usa `10.0.2.2` no `localhost`
-3. **Hot reload** funciona en ambas apps simultáneamente
+1. **Siempre inicia Angular primero** antes de ejecutar Flutter
+2. **En emulador Android** usa `10.0.2.2` no `localhost`
+3. **Hot reload** (presiona `r`) funciona en ambas apps
 4. **Los logs** son tu mejor amigo para debugging
-5. **El bridge** es asíncrono, maneja errores apropiadamente
+5. **El bridge es asíncrono** - maneja errores apropiadamente
 
 ---
 
-## 📞 Contacto del Proyecto
+## 📊 Estado del Proyecto
 
+### ✅ Funcionando
+- Compilación Flutter en Android/iOS
+- Carga de Angular en WebView
+- Comunicación bidireccional completa
+- Actualización reactiva de UI
+- BLoC pattern funcionando
+- Hot reload en ambas apps
+
+### ⚠️ Conocido pero No Crítico
+- iOS puede tener errores de compilación de Xcode
+- Solo plataformas móviles soportadas (por diseño)
+
+---
+
+## 📝 Historial de Cambios
+
+**2025-11-17:**
+- Eliminadas plataformas desktop/web (linux, macos, windows)
+- Actualizado `.metadata` para reflejar solo Android/iOS
+- Unificada documentación eliminando duplicaciones
+- Eliminado `RUN_NOW.md` (contenido en QUICKSTART)
+
+**2025-11-11:**
+- Eliminadas referencias a biometría
+- Reducido MVP a solo actualización de nombre
+- Proyecto funcional al 100% en Android
+
+---
+
+**Creado:** 2025-11-11
+**Actualizado:** 2025-11-17
 **Desarrollador:** Juan Carlos Suarez Marin
-**Fecha de creación:** 2025-11-11
-**Última actualización:** 2025-11-11
-
----
-
-**Fin del Documento de Contexto**

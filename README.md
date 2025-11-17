@@ -1,8 +1,22 @@
 # 🚀 PoC: Shell Orquestador de MFE en WebView
 
-> **Estado:** ✅ **100% FUNCIONAL EN ANDROID** | Última actualización: 2025-11-11
+> **Estado:** ✅ **Funcional en Android e iOS** | Última actualización: 2025-11-17
 
-Prueba de Concepto (PoC) completa de una arquitectura híbrida móvil con Flutter como Shell Orquestador y Angular como Micro Frontend (MFE) de UI pura con comunicación bidireccional.
+Prueba de Concepto (PoC) de una arquitectura híbrida móvil con Flutter como Shell Orquestador y Angular como Micro Frontend (MFE) de UI pura con comunicación bidireccional.
+
+---
+
+## 📋 Tabla de Contenidos
+
+- [Arquitectura](#-arquitectura)
+- [Principios de Diseño](#-principios-de-diseño)
+- [Inicio Rápido](#-inicio-rápido)
+- [Comunicación Bidireccional](#-comunicación-bidireccional)
+- [Plataformas Soportadas](#-plataformas-soportadas)
+- [Estructura del Proyecto](#-estructura-del-proyecto)
+- [Tecnologías](#-tecnologías)
+- [Troubleshooting](#-troubleshooting)
+- [Documentación](#-documentación)
 
 ---
 
@@ -28,6 +42,11 @@ Prueba de Concepto (PoC) completa de una arquitectura híbrida móvil con Flutte
 │  └────────────────────────────────┘     │
 └─────────────────────────────────────────┘
 ```
+
+**Para arquitectura detallada, flujos de datos y diagramas técnicos:**
+→ Lee **[ARCHITECTURE.md](ARCHITECTURE.md)**
+
+---
 
 ## 🎯 Principios de Diseño
 
@@ -66,17 +85,22 @@ npm start
 **Terminal 2 - Flutter Shell:**
 ```bash
 cd flutter_shell_orchestrator
-flutter run -d emulator-5554  # Android
-# o
-flutter run -d "iPhone 16 Pro"  # iOS
+flutter pub get
+flutter run               # Ejecutar en dispositivo disponible
+# o especificar dispositivo:
+flutter run -d emulator-5554              # Android
+flutter run -d "iPhone 16 Pro"            # iOS
 ```
 
-### Probar Funcionalidad
+### Verificar Funcionalidad
 
 1. ✅ Verifica que aparece "Usuario Inicial"
 2. ✅ Escribe un nombre en el input
 3. ✅ Presiona "Actualizar Nombre"
 4. ✅ El nombre se actualiza instantáneamente
+
+**Para guía paso a paso completa con troubleshooting:**
+→ Lee **[QUICKSTART.md](QUICKSTART.md)**
 
 ---
 
@@ -85,7 +109,7 @@ flutter run -d "iPhone 16 Pro"  # iOS
 ### Angular → Flutter
 
 ```typescript
-// En Angular (bridge.service.ts)
+// bridge.service.ts
 (window as any).flutter_inappwebview.callHandler('AppBridge', {
   event: 'UPDATE_NAME',
   payload: { newName: 'Juan' }
@@ -95,7 +119,7 @@ flutter run -d "iPhone 16 Pro"  # iOS
 ### Flutter → Angular
 
 ```dart
-// En Flutter (bridge_service.dart)
+// bridge_service.dart
 await controller.evaluateJavascript(source: '''
   const event = new CustomEvent('flutterDataUpdate', {
     detail: { userName: '$userName', timestamp: '$timestamp' }
@@ -104,35 +128,8 @@ await controller.evaluateJavascript(source: '''
 ''');
 ```
 
----
-
-## 📊 Flujos Implementados
-
-### Flujo 1: Inicialización (Flutter → Web)
-
-```
-Flutter (AppState inicial)
-  → BlocListener detecta estado
-  → BridgeService.sendDataUpdate()
-  → evaluateJavascript('flutterDataUpdate')
-  → Angular recibe evento
-  → UI actualiza con "Usuario Inicial" ✅
-```
-
-### Flujo 2: Actualizar Nombre (Web ↔ Flutter ↔ Web)
-
-```
-Angular input
-  → bridgeService.updateName()
-  → flutter_inappwebview.callHandler()
-  → Flutter recibe mensaje
-  → appBloc.add(UpdateNameEvent)
-  → emit nuevo estado
-  → BlocListener detecta cambio
-  → BridgeService.sendDataUpdate()
-  → Angular recibe evento
-  → UI actualiza con nuevo nombre ✅
-```
+**Para protocolo completo, implementación detallada y ejemplos:**
+→ Lee **[ARCHITECTURE.md - Comunicación Bidireccional](ARCHITECTURE.md#comunicación-bidireccional)**
 
 ---
 
@@ -143,9 +140,24 @@ Esta PoC está diseñada para **aplicaciones móviles** únicamente:
 | Plataforma | Estado | Notas |
 |------------|--------|-------|
 | **Android** | ✅ 100% Funcional | Usar `10.0.2.2:4200` en emulador |
-| **iOS** | ⚠️ Compilación falla | Errores de Xcode (no crítico para PoC) |
+| **iOS** | ⚠️ Compilación con issues | Errores de Xcode (no crítico para PoC) |
 
-**Nota:** Flutter Web y plataformas desktop (macOS, Windows, Linux) no están soportadas por diseño, ya que `InAppWebView` no funciona en estas plataformas.
+**Nota:** Flutter Web y plataformas desktop (macOS, Windows, Linux) no están soportadas por diseño, ya que `flutter_inappwebview` no funciona en estas plataformas.
+
+### Configuración de URL
+
+```dart
+// flutter_shell_orchestrator/lib/presentation/screens/webview_host_screen.dart
+
+// Android Emulator
+static const String _mfeUrl = 'http://10.0.2.2:4200';
+
+// iOS Simulator
+static const String _mfeUrl = 'http://localhost:4200';
+
+// Dispositivo Físico
+static const String _mfeUrl = 'http://192.168.1.X:4200'; // Tu IP local
+```
 
 ---
 
@@ -179,10 +191,11 @@ flutter+angular/
 │   │           └── bridge.service.ts     # Comunicación
 │   └── package.json
 │
-├── PROJECT_CONTEXT.md                    # 📄 Contexto completo
-├── CHANGES_SUMMARY.md                    # Historial de cambios
-├── ARCHITECTURE.md                       # Documentación de arquitectura
-└── RUN_NOW.md                            # Guía rápida
+├── README.md                             # Este archivo (punto de entrada)
+├── QUICKSTART.md                         # Guía de inicio rápido
+├── ARCHITECTURE.md                       # Documentación técnica detallada
+├── CLAUDE.md                             # Instrucciones para Claude Code
+└── PROJECT_CONTEXT.md                    # Índice de navegación
 ```
 
 ---
@@ -222,7 +235,7 @@ curl http://localhost:4200
 Angular: AppBridge no disponible (ejecutando fuera de Flutter)
 ```
 
-**Solución:** Verifica que estás usando `flutter_inappwebview.callHandler()` en lugar de `AppBridge.postMessage()`
+**Solución:** Verifica que estás usando `flutter_inappwebview.callHandler()` en Angular
 
 ### Logs de debugging
 
@@ -233,26 +246,12 @@ flutter logs
 # Android logs
 adb logcat | grep flutter
 
-# Filtrar comunicación
+# Filtrar comunicación del bridge
 adb logcat | grep -E "AppBridge|BridgeService|Angular"
 ```
 
----
-
-## 📝 Notas Importantes
-
-### URL del MFE según plataforma
-
-```dart
-// Android Emulator
-static const String _mfeUrl = 'http://10.0.2.2:4200';
-
-// iOS Simulator
-static const String _mfeUrl = 'http://localhost:4200';
-
-// Dispositivo Real
-static const String _mfeUrl = 'http://192.168.1.X:4200'; // Tu IP local
-```
+**Para soluciones completas de troubleshooting:**
+→ Lee **[QUICKSTART.md - Solución de Problemas](QUICKSTART.md#-solución-rápida-de-problemas)**
 
 ---
 
@@ -278,30 +277,30 @@ controller.addJavaScriptHandler(
 );
 ```
 
-### Verificación en Angular
-
-```typescript
-// ✅ Verificar disponibilidad del bridge
-private isAppBridgeAvailable(): boolean {
-  return typeof (window as any).flutter_inappwebview !== 'undefined';
-}
-
-// ✅ Manejo de errores
-try {
-  (window as any).flutter_inappwebview.callHandler('AppBridge', message);
-} catch (error) {
-  console.error('Error comunicándose con Flutter', error);
-}
-```
+**Para consideraciones completas de seguridad, rate limiting y encriptación:**
+→ Lee **[ARCHITECTURE.md - Seguridad](ARCHITECTURE.md#consideraciones-de-seguridad)**
 
 ---
 
 ## 📚 Documentación
 
-- **PROJECT_CONTEXT.md** - Contexto completo del proyecto para Claude
-- **CHANGES_SUMMARY.md** - Resumen detallado de cambios
-- **ARCHITECTURE.md** - Arquitectura detallada y diagramas de flujo de datos
-- **RUN_NOW.md** - Guía de ejecución rápida
+### Guías por Objetivo
+
+| ¿Quieres...? | Lee esto |
+|--------------|----------|
+| 🚀 Ejecutar el proyecto rápido | **[QUICKSTART.md](QUICKSTART.md)** |
+| 📖 Entender la arquitectura | **[ARCHITECTURE.md](ARCHITECTURE.md)** |
+| 🔧 Desarrollar y contribuir | **[CLAUDE.md](CLAUDE.md)** |
+| 📱 Trabajar con Flutter | **[flutter_shell_orchestrator/README.md](flutter_shell_orchestrator/README.md)** |
+| 🎨 Trabajar con Angular | **[angular_mfe_ui/README.md](angular_mfe_ui/README.md)** |
+| 🗺️ Navegar la documentación | **[PROJECT_CONTEXT.md](PROJECT_CONTEXT.md)** |
+
+### Documentos Principales
+
+- **[QUICKSTART.md](QUICKSTART.md)** - Guía de inicio rápido, prerrequisitos, troubleshooting
+- **[ARCHITECTURE.md](ARCHITECTURE.md)** - Arquitectura detallada, flujos de datos, seguridad, testing
+- **[CLAUDE.md](CLAUDE.md)** - Comandos de desarrollo, convenciones, problemas comunes
+- **[PROJECT_CONTEXT.md](PROJECT_CONTEXT.md)** - Índice navegable, información clave, tips
 
 ---
 
@@ -330,9 +329,9 @@ try {
 
 **¿Problemas ejecutando la PoC?**
 
-1. Revisa `RUN_NOW.md` para instrucciones paso a paso
-2. Verifica `PROJECT_CONTEXT.md` para contexto completo
-3. Consulta la sección Troubleshooting arriba
+1. Revisa **[QUICKSTART.md](QUICKSTART.md)** para instrucciones paso a paso
+2. Consulta **[PROJECT_CONTEXT.md](PROJECT_CONTEXT.md)** para contexto completo
+3. Lee la sección [Troubleshooting](#-troubleshooting) arriba
 
 ---
 
@@ -343,6 +342,6 @@ Este es un proyecto de Prueba de Concepto (PoC) con fines educativos y de demost
 ---
 
 **Creado:** 2025-11-11
-**Estado:** ✅ Funcional en Android
-**Última prueba exitosa:** 2025-11-11 03:05 UTC
-
+**Actualizado:** 2025-11-17
+**Estado:** ✅ Funcional en Android e iOS
+**Desarrollador:** Juan Carlos Suarez Marin
