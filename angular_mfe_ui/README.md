@@ -73,17 +73,14 @@ El servicio `BridgeService` envía mensajes al Shell de Flutter:
 ```typescript
 // Actualizar nombre
 bridgeService.updateName('Nuevo Nombre');
-
-// Solicitar biometría
-bridgeService.requestBiometricAuth();
 ```
 
 Internamente usa:
 ```typescript
-window.AppBridge.postMessage(JSON.stringify({
+window.flutter_inappwebview.callHandler('AppBridge', {
   event: 'UPDATE_NAME',
   payload: { newName: '...' }
-}));
+});
 ```
 
 ### De Flutter a Angular (CustomEvents)
@@ -94,11 +91,7 @@ El MFE escucha eventos del Shell:
 // Datos actualizados
 document.addEventListener('flutterDataUpdate', (event: CustomEvent) => {
   console.log(event.detail.userName);
-});
-
-// Resultado de biometría
-document.addEventListener('biometricResult', (event: CustomEvent) => {
-  console.log(event.detail.success, event.detail.error);
+  console.log(event.detail.timestamp);
 });
 ```
 
@@ -106,41 +99,25 @@ document.addEventListener('biometricResult', (event: CustomEvent) => {
 
 ### Mensajes de Angular a Flutter
 
-1. **UPDATE_NAME**
-   ```json
-   {
-     "event": "UPDATE_NAME",
-     "payload": {
-       "newName": "string"
-     }
-   }
-   ```
-
-2. **BIOMETRIC_REQUEST**
-   ```json
-   {
-     "event": "BIOMETRIC_REQUEST"
-   }
-   ```
+**UPDATE_NAME**
+```json
+{
+  "event": "UPDATE_NAME",
+  "payload": {
+    "newName": "string"
+  }
+}
+```
 
 ### Eventos de Flutter a Angular
 
-1. **flutterDataUpdate**
-   ```json
-   {
-     "userName": "string",
-     "timestamp": "ISO8601"
-   }
-   ```
-
-2. **biometricResult**
-   ```json
-   {
-     "success": boolean,
-     "error": "string | null",
-     "timestamp": "ISO8601"
-   }
-   ```
+**flutterDataUpdate**
+```json
+{
+  "userName": "string",
+  "timestamp": "ISO8601"
+}
+```
 
 ## Estructura del Proyecto
 

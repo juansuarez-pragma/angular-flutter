@@ -14,7 +14,7 @@ Esta PoC implementa una arquitectura híbrida móvil donde:
 #### Responsabilidades
 - Gestión de estado global (flutter_bloc)
 - Navegación (go_router)
-- Orquestación de funcionalidades nativas (biometría, almacenamiento, etc.)
+- Orquestación de funcionalidades nativas
 - Provisión de datos al MFE
 - Validación de seguridad
 
@@ -24,7 +24,6 @@ dependencies:
   flutter_bloc: ^8.1.3          # Gestión de estado
   go_router: ^13.0.0            # Navegación
   flutter_inappwebview: ^6.0.0  # WebView con JS bridge
-  local_auth: ^2.2.0            # Biometría
   dio: ^5.4.0                   # HTTP client
 ```
 
@@ -42,8 +41,7 @@ lib/
 │   │   ├── app_event.dart         # Eventos de la app
 │   │   └── app_state.dart         # Estados de la app
 │   └── services/
-│       ├── bridge_service.dart    # Comunicación con WebView
-│       └── biometric_service.dart # Wrapper de local_auth
+│       └── bridge_service.dart    # Comunicación con WebView
 └── presentation/
     └── screens/
         └── webview_host_screen.dart  # Pantalla con WebView
@@ -123,30 +121,30 @@ src/
 │  ┌─────────────────────────────────────────────────┐    │
 │  │              AppBloc (Estado)                    │    │
 │  │  - userName: string                              │    │
-│  │  - isAuthenticated: bool                         │    │
-│  │  - biometricResult: bool?                        │    │
-│  └────────────┬───────────────────────┬─────────────┘    │
-│               │                       │                   │
-│               ↓                       ↓                   │
-│  ┌────────────────────┐   ┌──────────────────────┐      │
-│  │  BiometricService  │   │   BridgeService      │      │
-│  │  - authenticate()  │   │   - sendDataUpdate() │      │
-│  └────────────────────┘   │   - sendBiometric()  │      │
-│                            └──────────┬───────────┘      │
-│                                       │                   │
-│  ┌────────────────────────────────────┼────────────┐     │
-│  │         InAppWebViewController     │            │     │
-│  │                                    ↓            │     │
-│  │    ┌──────────────────────────────────────┐    │     │
-│  │    │   evaluateJavascript()               │    │     │
-│  │    │   (Envía CustomEvent a Angular)      │    │     │
-│  │    └──────────────────────────────────────┘    │     │
-│  │                                                 │     │
-│  │    ┌──────────────────────────────────────┐    │     │
-│  │    │   addJavaScriptHandler('AppBridge')  │    │     │
-│  │    │   (Recibe postMessage de Angular)    │    │     │
-│  │    └──────────────────────────────────────┘    │     │
-│  └────────────────────────────────────────────────┘     │
+│  │  - lastUpdated: DateTime                         │    │
+│  └────────────┬─────────────────────────────────────┘    │
+│               │                                           │
+│               ↓                                           │
+│  ┌──────────────────────┐                                │
+│  │   BridgeService      │                                │
+│  │   - sendDataUpdate() │                                │
+│  │   - sendAppState()   │                                │
+│  └──────────┬───────────┘                                │
+│             │                                             │
+│  ┌──────────┼──────────────────────────────────────┐    │
+│  │          ↓                                       │    │
+│  │    InAppWebViewController                       │    │
+│  │                                                  │    │
+│  │    ┌──────────────────────────────────────┐    │    │
+│  │    │   evaluateJavascript()               │    │    │
+│  │    │   (Envía CustomEvent a Angular)      │    │    │
+│  │    └──────────────────────────────────────┘    │    │
+│  │                                                  │    │
+│  │    ┌──────────────────────────────────────┐    │    │
+│  │    │   addJavaScriptHandler('AppBridge')  │    │    │
+│  │    │   (Recibe postMessage de Angular)    │    │    │
+│  │    └──────────────────────────────────────┘    │    │
+│  └─────────────────────────────────────────────────┘    │
 │                         ↕                                 │
 │         ═══════════════════════════════                  │
 │              JavaScript Bridge                            │
@@ -159,7 +157,8 @@ src/
 │  │   │      BridgeService                   │     │     │
 │  │   │                                      │     │     │
 │  │   │  Enviar → Flutter:                  │     │     │
-│  │   │  window.AppBridge.postMessage()     │     │     │
+│  │   │  window.flutter_inappwebview        │     │     │
+│  │   │    .callHandler('AppBridge', ...)   │     │     │
 │  │   │                                      │     │     │
 │  │   │  Recibir ← Flutter:                 │     │     │
 │  │   │  document.addEventListener()        │     │     │
@@ -169,9 +168,7 @@ src/
 │  │   ┌──────────────────────────────────────┐     │     │
 │  │   │      AppComponent                    │     │     │
 │  │   │  - userName: string                  │     │     │
-│  │   │  - authStatus: string                │     │     │
 │  │   │  - onUpdateNameClick()               │     │     │
-│  │   │  - onBiometricAuthClick()            │     │     │
 │  │   └──────────────────────────────────────┘     │     │
 │  └────────────────────────────────────────────────┘     │
 └──────────────────────────────────────────────────────────┘
@@ -188,7 +185,7 @@ interface Message {
 }
 ```
 
-**Ejemplos:**
+**Ejemplo:**
 
 ```json
 // Actualizar nombre
@@ -197,11 +194,6 @@ interface Message {
   "payload": {
     "newName": "Juan Pérez"
   }
-}
-
-// Solicitar biometría
-{
-  "event": "BIOMETRIC_REQUEST"
 }
 ```
 
@@ -216,16 +208,6 @@ interface Message {
   detail: {
     userName: 'Juan Pérez',
     timestamp: '2025-11-11T10:30:00Z'
-  }
-}
-
-// Resultado de biometría
-{
-  type: 'biometricResult',
-  detail: {
-    success: true,
-    error: null,
-    timestamp: '2025-11-11T10:30:05Z'
   }
 }
 ```
@@ -276,9 +258,6 @@ controller.addJavaScriptHandler(
       case 'UPDATE_NAME':
         appBloc.add(UpdateNameEvent(payload['payload']['newName']));
         break;
-      case 'BIOMETRIC_REQUEST':
-        appBloc.add(BiometricAuthRequestedEvent());
-        break;
     }
 
     return {'success': true};
@@ -308,15 +287,6 @@ private initializeListeners(): void {
   document.addEventListener('flutterDataUpdate', ((event: CustomEvent) => {
     if (event.detail && event.detail.userName) {
       this.userName$.next(event.detail.userName);
-    }
-  }) as EventListener);
-
-  document.addEventListener('biometricResult', ((event: CustomEvent) => {
-    if (event.detail) {
-      this.biometricResult$.next({
-        success: event.detail.success,
-        error: event.detail.error
-      });
     }
   }) as EventListener);
 }
@@ -397,65 +367,6 @@ private initializeListeners(): void {
                    └─→ UI actualiza con "Nuevo Nombre"
 ```
 
-### Flujo 3: Autenticación Biométrica
-
-```
-1. Usuario en Angular click en "Autenticar"
-   │
-   ├─→ AppComponent.onBiometricAuthClick()
-   │   │
-   │   ├─→ authStatus = "Autenticando..."
-   │   │
-   │   └─→ BridgeService.requestBiometricAuth()
-   │       │
-   │       └─→ window.AppBridge.postMessage({ event: 'BIOMETRIC_REQUEST' })
-   │
-   └─→ Flutter recibe mensaje
-       │
-       ├─→ AppBridge handler procesa
-       │   │
-       │   └─→ appBloc.add(BiometricAuthRequestedEvent())
-       │
-       └─→ AppBloc._onBiometricAuthRequested() se ejecuta
-           │
-           ├─→ emit(state.clearBiometricResult())
-           │
-           ├─→ biometricService.authenticate() - async
-           │   │
-           │   ├─→ localAuth.canCheckBiometrics()
-           │   │
-           │   └─→ localAuth.authenticate()
-           │       │
-           │       └─→ Sistema muestra diálogo nativo
-           │           │
-           │           ├─→ iOS: Face ID / Touch ID
-           │           └─→ Android: Fingerprint / Face
-           │
-           ├─→ Usuario autentica (éxito/fallo)
-           │
-           ├─→ BiometricResult retorna
-           │
-           ├─→ emit(state.copyWith(
-           │     biometricAuthSuccess: true/false,
-           │     biometricErrorMessage: ...
-           │   ))
-           │
-           └─→ BlocListener detecta cambio
-               │
-               ├─→ BridgeService.sendBiometricResult()
-               │   │
-               │   └─→ evaluateJavascript('biometricResult')
-               │
-               └─→ Angular recibe evento
-                   │
-                   ├─→ BridgeService.biometricResult$ emite
-                   │
-                   └─→ AppComponent.handleBiometricResult()
-                       │
-                       └─→ authStatus = "✅ Autenticación exitosa"
-                           o "❌ Error: ..."
-```
-
 ## Consideraciones de Seguridad
 
 ### 1. Validación de Origen
@@ -482,7 +393,7 @@ controller.addJavaScriptHandler(
       final payload = jsonDecode(args[0]);
 
       // ✅ Validar evento conocido
-      if (!['UPDATE_NAME', 'BIOMETRIC_REQUEST'].contains(payload['event'])) {
+      if (!['UPDATE_NAME'].contains(payload['event'])) {
         return {'error': 'Unknown event'};
       }
 
@@ -563,11 +474,7 @@ const decrypted = decryptData(event.detail.data);
 ### iOS (Info.plist)
 
 ```xml
-<!-- Biometría -->
-<key>NSFaceIDUsageDescription</key>
-<string>Esta app necesita Face ID para autenticación</string>
-
-<!-- Permitir localhost -->
+<!-- Permitir localhost para desarrollo -->
 <key>NSAppTransportSecurity</key>
 <dict>
   <key>NSAllowsArbitraryLoads</key>
@@ -582,24 +489,12 @@ const decrypted = decryptData(event.detail.data);
 ```xml
 <!-- Permisos -->
 <uses-permission android:name="android.permission.INTERNET" />
-<uses-permission android:name="android.permission.USE_BIOMETRIC"/>
-<uses-permission android:name="android.permission.USE_FINGERPRINT"/>
 
-<!-- Cleartext traffic para localhost -->
+<!-- Cleartext traffic para localhost en desarrollo -->
 <application
     android:usesCleartextTraffic="true">
     ...
 </application>
-```
-
-### Android (build.gradle)
-
-```gradle
-android {
-    defaultConfig {
-        minSdkVersion 21  // Requerido para biometría
-    }
-}
 ```
 
 ## Performance y Optimizaciones
@@ -663,11 +558,9 @@ this.bridgeService.userName$
 void main() {
   group('AppBloc', () {
     late AppBloc appBloc;
-    late BiometricService biometricService;
 
     setUp(() {
-      biometricService = MockBiometricService();
-      appBloc = AppBloc(biometricService: biometricService);
+      appBloc = AppBloc();
     });
 
     test('emits updated name when UpdateNameEvent is added', () {
@@ -762,8 +655,8 @@ class PerformanceMonitor {
 
 // Uso
 await PerformanceMonitor.measure(
-  'biometric_auth',
-  () => biometricService.authenticate(),
+  'update_name',
+  () => bridgeService.sendDataUpdate(userName: 'Test'),
 );
 ```
 

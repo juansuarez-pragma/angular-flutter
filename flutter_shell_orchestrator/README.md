@@ -7,14 +7,13 @@ Shell orquestador de micro frontends (MFE) en WebView construido con Flutter.
 - Gestión de estado con `flutter_bloc`
 - Navegación con `go_router`
 - WebView nativo con `flutter_inappwebview`
-- Autenticación biométrica con `local_auth`
 - Comunicación bidireccional con MFE de Angular
 
 ## Arquitectura
 
 Este shell actúa como el "cerebro" de la aplicación:
 - Maneja toda la lógica de negocio
-- Orquesta funcionalidades nativas (biometría, almacenamiento, etc.)
+- Orquesta funcionalidades nativas
 - Se comunica con el MFE de Angular vía puente JavaScript
 
 ## Requisitos
@@ -44,35 +43,26 @@ flutter run
 ## Configuración Nativa
 
 ### iOS
-- Permisos de Face ID configurados en `Info.plist`
-- Acceso a localhost permitido para desarrollo
+- Acceso a localhost permitido para desarrollo en `Info.plist`
 
 ### Android
-- Permisos de biometría en `AndroidManifest.xml`
-- Tráfico cleartext habilitado para localhost
+- Tráfico cleartext habilitado para localhost en `AndroidManifest.xml`
 
 ## Contrato de Comunicación
 
 ### De MFE a Flutter (AppBridge)
 ```javascript
-window.AppBridge.postMessage(JSON.stringify({
+window.flutter_inappwebview.callHandler('AppBridge', {
   event: 'UPDATE_NAME',
   payload: { newName: '...' }
-}));
-
-window.AppBridge.postMessage(JSON.stringify({
-  event: 'BIOMETRIC_REQUEST'
-}));
+});
 ```
 
 ### De Flutter a MFE (CustomEvents)
 ```javascript
 document.addEventListener('flutterDataUpdate', (event) => {
   console.log(event.detail.userName);
-});
-
-document.addEventListener('biometricResult', (event) => {
-  console.log(event.detail.success, event.detail.error);
+  console.log(event.detail.timestamp);
 });
 ```
 
@@ -90,8 +80,7 @@ lib/
 │   │   ├── app_event.dart
 │   │   └── app_state.dart
 │   └── services/                # Servicios
-│       ├── bridge_service.dart  # Puente de comunicación
-│       └── biometric_service.dart
+│       └── bridge_service.dart  # Puente de comunicación
 └── presentation/
     └── screens/
         └── webview_host_screen.dart
@@ -101,7 +90,6 @@ lib/
 
 1. **Flujo Inicial (Flutter → Web)**: Envía userName inicial al cargar
 2. **Actualizar Nombre (Web → Flutter → Web)**: MFE actualiza nombre en BLoC
-3. **Biometría (Bucle Completo)**: Solicitud → Autenticación → Respuesta
 
 ## Desarrollo
 
@@ -125,5 +113,5 @@ flutter build ios --release
 ## Solución de Problemas
 
 - **WebView no carga**: Verificar que el MFE esté corriendo en `localhost:4200`
-- **Biometría falla**: Verificar permisos nativos y configuración del dispositivo
 - **Comunicación no funciona**: Revisar logs de consola del WebView
+- **Android no conecta**: Usar `10.0.2.2:4200` en lugar de `localhost:4200`

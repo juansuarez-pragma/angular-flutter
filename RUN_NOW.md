@@ -1,4 +1,4 @@
-# 🚀 Ejecutar PoC Ahora (Sin Biometría)
+# 🚀 Ejecutar PoC Ahora
 
 ## ⚡ Inicio Rápido - 2 Comandos
 
@@ -156,9 +156,9 @@ Si llegaste hasta aquí y todo funciona:
 
 ## 📚 Más Información
 
-- `BIOMETRY_REMOVED.md` - Detalles de la simplificación
 - `README.md` - Documentación completa del proyecto
-- `ARCHITECTURE.md` - Arquitectura detallada
+- `ARCHITECTURE.md` - Arquitectura detallada y diagramas de flujo
+- `PROJECT_CONTEXT.md` - Contexto completo para desarrollo
 - `QUICKSTART.md` - Guía de inicio rápido original
 
 ---

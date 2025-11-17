@@ -62,7 +62,13 @@ npm start                 # Inicia servidor en http://0.0.0.0:4200
 cd flutter_shell_orchestrator
 flutter pub get           # Solo la primera vez
 flutter run               # Ejecuta en dispositivo disponible
-flutter run -d chrome     # Para testing web (más rápido)
+flutter run -d chrome     # Para testing web (más rápido, pero WebView no funciona)
+
+# Ejemplos para dispositivos específicos:
+flutter devices          # Listar dispositivos disponibles
+flutter run -d emulator-5554              # Android emulador específico
+flutter run -d "iPhone 16 Pro"            # iOS simulador específico
+flutter run -d macos                      # macOS
 ```
 
 ### Testing
@@ -131,7 +137,7 @@ ng build --configuration production
 ```typescript
 // Angular → Flutter
 {
-  event: 'UPDATE_NAME' | 'BIOMETRIC_REQUEST',
+  event: 'UPDATE_NAME',  // Actualmente solo UPDATE_NAME está implementado
   payload?: { ... }
 }
 ```
@@ -139,16 +145,23 @@ ng build --configuration production
 ### Gestión de Estado (Flutter)
 
 Usa el **patrón BLoC** (paquete `flutter_bloc`):
-1. UI despacha eventos: `appBloc.add(UpdateNameEvent(name))`
-2. BLoC procesa evento: `_onUpdateName()`
-3. BLoC emite nuevo estado: `emit(state.copyWith(...))`
-4. `BlocListener` reacciona a cambios de estado y dispara comunicación del puente
+1. UI/WebView despacha eventos: `appBloc.add(UpdateNameEvent(name))`
+2. BLoC procesa evento: `_onUpdateName()` en `app_bloc.dart`
+3. BLoC emite nuevo estado: `emit(state.copyWith(userName: newName))`
+4. `BlocListener` en `webview_host_screen.dart` reacciona y dispara `bridgeService.sendAppState()`
+
+**Eventos implementados:**
+- `UpdateNameEvent(String newName)` - Actualiza el nombre del usuario
+
+**Estado actual:**
+- `userName: String` - Nombre del usuario
+- `lastUpdated: DateTime` - Timestamp de última actualización
 
 ### Configuración de URL
 
 **Importante:** Se necesitan diferentes URLs según la plataforma:
 ```dart
-// Emulador Android
+// Emulador Android (configurado actualmente)
 const _mfeUrl = 'http://10.0.2.2:4200';
 
 // Simulador iOS / macOS
@@ -158,7 +171,9 @@ const _mfeUrl = 'http://localhost:4200';
 const _mfeUrl = 'http://192.168.1.X:4200'; // Usa tu IP local
 ```
 
-Configuración actual: `webview_host_screen.dart:30`
+**Configuración actual:** `webview_host_screen.dart:24` - Configurado para Android emulator (`10.0.2.2:4200`)
+
+**Para cambiar:** Edita la constante `_mfeUrl` en `lib/presentation/screens/webview_host_screen.dart` según tu plataforma de desarrollo.
 
 ## Tecnologías Clave
 
@@ -251,13 +266,29 @@ adb logcat | grep -i "webview\|console"
 - Revisa los logs de Flutter por errores de inicialización del WebView
 - Verifica que la URL coincide con la plataforma (ver Configuración de URL arriba)
 
+## MCP Dart Integration
+
+Este proyecto tiene integración con el MCP (Model Context Protocol) server de Dart que proporciona herramientas adicionales:
+
+**Herramientas disponibles:**
+- `mcp__dart__add_roots` - Agregar raíces de proyecto antes de usar otras herramientas
+- `mcp__dart__analyze_files` - Analizar el proyecto completo por errores
+- `mcp__dart__dart_fix` - Ejecutar `dart fix --apply` automáticamente
+- `mcp__dart__dart_format` - Ejecutar `dart format` en archivos
+- `mcp__dart__run_tests` - Ejecutar tests de Dart/Flutter con mejor UX
+- `mcp__dart__pub` - Gestionar dependencias (add, get, remove, upgrade)
+- `mcp__dart__hot_reload` - Hot reload de aplicaciones Flutter (requiere DTD conectado)
+- `mcp__dart__get_runtime_errors` - Ver errores en tiempo de ejecución
+
+**Nota:** Algunas herramientas requieren conectarse al Dart Tooling Daemon (DTD) primero usando `mcp__dart__connect_dart_tooling_daemon`.
+
 ## Documentación Adicional
 
 - `README.md` - Documentación completa del proyecto
 - `ARCHITECTURE.md` - Arquitectura detallada y diagramas de flujo de datos
-- `QUICKSTART.md` - Guía de configuración paso a paso
-- `PROJECT_CONTEXT.md` - Contexto completo para asistentes de IA
-- `BIOMETRY_REMOVED.md` - Detalles sobre funcionalidad biométrica removida
+- `QUICKSTART.md` - Guía de configuración paso a paso (si existe)
+- `PROJECT_CONTEXT.md` - Contexto completo para asistentes de IA (si existe)
+- `BIOMETRY_REMOVED.md` - Detalles sobre funcionalidad biométrica removida (si existe)
 
 ## Flujo de Trabajo de Desarrollo
 

@@ -179,7 +179,7 @@ flutter+angular/
 │
 ├── PROJECT_CONTEXT.md                    # 📄 Contexto completo
 ├── CHANGES_SUMMARY.md                    # Historial de cambios
-├── BIOMETRY_REMOVED.md                   # Simplificación realizada
+├── ARCHITECTURE.md                       # Documentación de arquitectura
 └── RUN_NOW.md                            # Guía rápida
 ```
 
@@ -239,16 +239,6 @@ adb logcat | grep -E "AppBridge|BridgeService|Angular"
 
 ## 📝 Notas Importantes
 
-### Biometría Eliminada
-
-La funcionalidad de biometría fue eliminada para simplificar la PoC:
-- ❌ Removida dependencia `local_auth`
-- ❌ Eliminado `biometric_service.dart`
-- ❌ Removidos eventos y estados de biometría
-- ✅ Proyecto más simple y rápido de compilar
-
-Ver `BIOMETRY_REMOVED.md` para detalles completos.
-
 ### URL del MFE según plataforma
 
 ```dart
@@ -307,8 +297,8 @@ try {
 ## 📚 Documentación
 
 - **PROJECT_CONTEXT.md** - Contexto completo del proyecto para Claude
-- **CHANGES_SUMMARY.md** - Resumen detallado de cambios (~377 líneas eliminadas)
-- **BIOMETRY_REMOVED.md** - Documentación de la simplificación
+- **CHANGES_SUMMARY.md** - Resumen detallado de cambios
+- **ARCHITECTURE.md** - Arquitectura detallada y diagramas de flujo de datos
 - **RUN_NOW.md** - Guía de ejecución rápida
 
 ---

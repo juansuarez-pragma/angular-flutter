@@ -54,7 +54,7 @@
 ├── angular_mfe_ui/                 # Angular MFE
 ├── PROJECT_CONTEXT.md             # Este archivo
 ├── CHANGES_SUMMARY.md             # Resumen de cambios
-├── BIOMETRY_REMOVED.md            # Documentación de eliminación de biometría
+├── ARCHITECTURE.md                # Documentación de arquitectura detallada
 └── RUN_NOW.md                     # Guía rápida de ejecución
 ```
 
@@ -264,22 +264,9 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
 ---
 
-## ⚠️ Problemas Resueltos
+## ⚠️ Problemas Comunes y Soluciones
 
-### 1. ❌ Biometría Eliminada
-
-**Problema:** Dependencias de `local_auth` causaban errores de compilación en iOS
-
-**Solución:** Eliminación completa de biometría de la PoC
-- 14 archivos modificados
-- ~377 líneas de código eliminadas
-- 2 flujos finales (vs 3 originales)
-
-**Archivos de documentación:**
-- `BIOMETRY_REMOVED.md`
-- `CHANGES_SUMMARY.md`
-
-### 2. ❌ AppBridge no disponible
+### 1. ❌ AppBridge no disponible
 
 **Problema:** Angular no detectaba el bridge de Flutter
 
@@ -443,7 +430,6 @@ adb logcat | grep flutter
 
 ### iOS: `Info.plist`
 - `NSAppTransportSecurity` para localhost
-- Sin `NSFaceIDUsageDescription` (biometría eliminada)
 
 ---
 
@@ -474,7 +460,7 @@ adb logcat | grep flutter
 
 ## 📚 Documentación Adicional
 
-- `BIOMETRY_REMOVED.md` - Detalles de eliminación de biometría
+- `ARCHITECTURE.md` - Arquitectura detallada y diagramas de flujo de datos
 - `CHANGES_SUMMARY.md` - Resumen completo de cambios
 - `RUN_NOW.md` - Guía rápida de ejecución
 

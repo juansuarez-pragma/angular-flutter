@@ -82,13 +82,6 @@ Una vez que ambas apps estén ejecutándose:
 3. Deberías ver "Mi Nombre" actualizado instantáneamente
 - **✅ Si funciona, Angular → Flutter → Angular funciona**
 
-### 4. Probar Flujo 3: Biometría
-1. Presiona "Autenticar con Biometría"
-2. Deberías ver el diálogo nativo de biometría
-3. Autentica (o cancela)
-4. Verás el resultado en Angular
-- **✅ Si funciona, el bucle completo funciona**
-
 ## 🐛 Solución Rápida de Problemas
 
 ### Problema: "Cannot connect to localhost:4200"
@@ -126,34 +119,6 @@ flutter run -d chrome
 - Espera unos segundos
 - Verifica logs de Flutter: "AppBridge JavaScriptHandler registrado"
 - Recarga la app: `r` en la terminal de Flutter
-
-### Problema: Biometría no funciona en emulador
-
-**Solución:**
-
-**iOS Simulator:**
-```
-Features → Face ID → Enrolled
-Features → Face ID → Matching Face (al autenticar)
-```
-
-**Android Emulator:**
-```
-Settings → Security → Fingerprint
-Agregar huella virtual
-```
-
-### Problema: "Permission denied" en Android
-
-**Solución:**
-```bash
-# Verificar que los permisos estén en AndroidManifest.xml
-cd flutter_shell_orchestrator
-cat android/app/src/main/AndroidManifest.xml | grep BIOMETRIC
-
-# Deberías ver:
-# <uses-permission android:name="android.permission.USE_BIOMETRIC"/>
-```
 
 ## 📱 Ejecución en Dispositivo Real
 
