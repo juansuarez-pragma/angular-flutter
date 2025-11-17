@@ -1,102 +1,56 @@
-<div class="container">
-  <!-- Header -->
-  <header class="header">
-    <h1>🎯 Angular MFE UI</h1>
-    <p class="subtitle">Vista Pura - Sin Lógica de Negocio</p>
-  </header>
-
+<div class="app-container">
   <!-- Status Badge -->
-  <div class="status-badge" [class.active]="isRunningInFlutter">
-    <span class="badge-icon">{{ isRunningInFlutter ? '🟢' : '🔴' }}</span>
-    <span class="badge-text">
-      {{ isRunningInFlutter ? 'Conectado a Flutter' : 'Modo Standalone' }}
+  <div class="status-badge" [class.connected]="isRunningInFlutter">
+    <span class="status-dot"></span>
+    <span class="status-text">
+      {{ isRunningInFlutter ? 'Conectado' : 'Desconectado' }}
     </span>
   </div>
 
-  <!-- Main Content -->
-  <main class="content">
-    <!-- User Info Card -->
-    <section class="card">
-      <div class="card-header">
-        <h2>👤 Información de Usuario</h2>
+  <!-- Main Card -->
+  <div class="main-card">
+    <!-- Avatar Section -->
+    <div class="avatar-section">
+      <div class="avatar">
+        <span class="avatar-text">{{ getInitials(userName) }}</span>
       </div>
-      <div class="card-body">
-        <div class="user-display">
-          <span class="label">Nombre Actual:</span>
-          <span class="value">{{ userName }}</span>
-        </div>
-      </div>
-    </section>
+      <h1 class="user-name">{{ userName }}</h1>
+      <p class="user-label">Nombre de Usuario</p>
+    </div>
 
-    <!-- Update Name Card -->
-    <section class="card">
-      <div class="card-header">
-        <h2>✏️ Actualizar Nombre</h2>
-      </div>
-      <div class="card-body">
-        <p class="description">
-          Este botón envía un mensaje a Flutter para actualizar el nombre en el BLoC.
-        </p>
-        <div class="input-group">
-          <input
-            type="text"
-            [(ngModel)]="newNameInput"
-            placeholder="Ingresa nuevo nombre..."
-            class="text-input"
-            (keyup.enter)="onUpdateNameClick()"
-          />
-          <button
-            class="btn btn-primary"
-            (click)="onUpdateNameClick()"
-            [disabled]="!isRunningInFlutter"
-          >
-            Actualizar Nombre
-          </button>
-        </div>
-        <p class="hint" *ngIf="!isRunningInFlutter">
-          ⚠️ Esta función solo está disponible dentro de Flutter
-        </p>
-      </div>
-    </section>
+    <!-- Divider -->
+    <div class="divider"></div>
 
-    <!-- Architecture Info Card -->
-    <section class="card info-card">
-      <div class="card-header">
-        <h2>📋 Arquitectura</h2>
+    <!-- Update Section -->
+    <div class="update-section">
+      <label class="input-label">Actualizar nombre</label>
+      <div class="input-wrapper">
+        <input
+          type="text"
+          [(ngModel)]="newNameInput"
+          placeholder="Ingresa tu nombre..."
+          class="text-input"
+          (keyup.enter)="onUpdateNameClick()"
+          [disabled]="!isRunningInFlutter"
+        />
       </div>
-      <div class="card-body">
-        <ul class="info-list">
-          <li>✅ Este MFE solo contiene UI (vista tonta)</li>
-          <li>✅ NO tiene lógica de negocio</li>
-          <li>✅ NO maneja estado (sin NgRx)</li>
-          <li>✅ NO hace llamadas HTTP</li>
-          <li>✅ Toda la lógica está en Flutter Shell</li>
-          <li>✅ Comunicación bidireccional vía puente JavaScript</li>
-        </ul>
-      </div>
-    </section>
+      <button
+        class="update-button"
+        (click)="onUpdateNameClick()"
+        [disabled]="!isRunningInFlutter || !newNameInput.trim()"
+      >
+        <span class="button-icon">✓</span>
+        <span>Actualizar</span>
+      </button>
 
-    <!-- Communication Flow Card -->
-    <section class="card">
-      <div class="card-header">
-        <h2>🔄 Flujos Implementados</h2>
-      </div>
-      <div class="card-body">
-        <div class="flow-item">
-          <h3>1️⃣ Flujo de Inicialización (Flutter → Web)</h3>
-          <p>Flutter envía el nombre inicial al cargar la app</p>
-        </div>
-        <div class="flow-item">
-          <h3>2️⃣ Flujo de Actualización (Web ↔ Flutter ↔ Web)</h3>
-          <p>Angular solicita cambio → Flutter actualiza BLoC → Angular recibe actualización</p>
-        </div>
-      </div>
-    </section>
-  </main>
+      <p class="helper-text" *ngIf="!isRunningInFlutter">
+        Esta función requiere estar conectado a Flutter
+      </p>
+    </div>
+  </div>
 
   <!-- Footer -->
-  <footer class="footer">
-    <p>🚀 PoC: Shell Orquestador de MFE en WebView</p>
-    <p class="tech-stack">Angular 17 + Flutter + flutter_inappwebview</p>
-  </footer>
+  <div class="footer">
+    <p class="footer-text">Angular MFE • Flutter Shell</p>
+  </div>
 </div>

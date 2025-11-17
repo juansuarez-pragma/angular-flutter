@@ -67,4 +67,21 @@ export class AppComponent implements OnInit, OnDestroy {
     this.bridgeService.updateName(this.newNameInput);
     this.newNameInput = '';
   }
+
+  /**
+   * Obtiene las iniciales del nombre de usuario
+   */
+  getInitials(name: string): string {
+    if (!name || name === 'Cargando...') {
+      return '...';
+    }
+
+    const words = name.trim().split(' ');
+
+    if (words.length === 1) {
+      return words[0].substring(0, 2).toUpperCase();
+    }
+
+    return (words[0].charAt(0) + words[words.length - 1].charAt(0)).toUpperCase();
+  }
 }
