@@ -298,15 +298,15 @@ Angular: AppBridge no disponible (ejecutando fuera de Flutter)
 
 **Estado:** No resuelto, pero no crítico porque Android funciona perfectamente
 
-**Alternativa:** Usar emulador Android o macOS (ambos soportados)
+**Alternativa:** Usar emulador Android (100% funcional)
 
 ### 4. ❌ WebView en blanco en Chrome
 
-**Problema:** `flutter run -d chrome` mostraba WebView en blanco
+**Problema:** WebView mostraba pantalla en blanco
 
-**Causa:** `flutter_inappwebview` NO soporta Flutter Web, solo plataformas nativas
+**Causa:** `flutter_inappwebview` NO soporta Flutter Web ni desktop, solo plataformas móviles nativas
 
-**Solución:** Usar Android, iOS o macOS
+**Solución:** Usar Android o iOS únicamente
 
 ---
 
@@ -359,10 +359,12 @@ flutter run -d emulator-5554  # o el ID de tu emulador
 - Flutter Web no soporta InAppWebView
 
 ### 🎯 Plataformas Soportadas
-- ✅ **Android** (100% funcional)
-- ⚠️ iOS (errores de compilación)
-- ✅ macOS (debería funcionar, no probado completamente)
-- ❌ Web (InAppWebView no soportado)
+
+**Esta PoC está diseñada para aplicaciones móviles únicamente:**
+- ✅ **Android** - 100% funcional
+- ⚠️ **iOS** - Con errores de compilación (no crítico para PoC)
+
+**Nota:** Flutter Web y desktop (macOS, Windows, Linux) no están soportados porque `InAppWebView` solo funciona en plataformas móviles nativas.
 
 ---
 

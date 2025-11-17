@@ -138,12 +138,14 @@ Angular input
 
 ## 📱 Plataformas Soportadas
 
+Esta PoC está diseñada para **aplicaciones móviles** únicamente:
+
 | Plataforma | Estado | Notas |
 |------------|--------|-------|
 | **Android** | ✅ 100% Funcional | Usar `10.0.2.2:4200` en emulador |
-| **iOS** | ⚠️ Compilación falla | Errores de Xcode (no crítico) |
-| **macOS** | ✅ Debería funcionar | No probado completamente |
-| **Web** | ❌ No soportado | InAppWebView no funciona en Flutter Web |
+| **iOS** | ⚠️ Compilación falla | Errores de Xcode (no crítico para PoC) |
+
+**Nota:** Flutter Web y plataformas desktop (macOS, Windows, Linux) no están soportadas por diseño, ya que `InAppWebView` no funciona en estas plataformas.
 
 ---
 

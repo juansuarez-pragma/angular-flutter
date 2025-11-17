@@ -62,13 +62,11 @@ npm start                 # Inicia servidor en http://0.0.0.0:4200
 cd flutter_shell_orchestrator
 flutter pub get           # Solo la primera vez
 flutter run               # Ejecuta en dispositivo disponible
-flutter run -d chrome     # Para testing web (más rápido, pero WebView no funciona)
 
 # Ejemplos para dispositivos específicos:
-flutter devices          # Listar dispositivos disponibles
+flutter devices                           # Listar dispositivos disponibles
 flutter run -d emulator-5554              # Android emulador específico
 flutter run -d "iPhone 16 Pro"            # iOS simulador específico
-flutter run -d macos                      # macOS
 ```
 
 ### Testing
@@ -109,7 +107,6 @@ ng lint                   # Ejecutar linter (si está configurado)
 cd flutter_shell_orchestrator
 flutter build apk         # APK Android
 flutter build ios         # Build iOS
-flutter build web         # Build web (nota: InAppWebView no soportado en web)
 ```
 
 **Angular:**
@@ -164,7 +161,7 @@ Usa el **patrón BLoC** (paquete `flutter_bloc`):
 // Emulador Android (configurado actualmente)
 const _mfeUrl = 'http://10.0.2.2:4200';
 
-// Simulador iOS / macOS
+// Simulador iOS
 const _mfeUrl = 'http://localhost:4200';
 
 // Dispositivo Físico
@@ -193,11 +190,8 @@ const _mfeUrl = 'http://192.168.1.X:4200'; // Usa tu IP local
 ### Soporte de Plataformas
 - ✅ **Android:** Totalmente funcional (usa `10.0.2.2:4200` para emulador)
 - ⚠️ **iOS:** Existen problemas de compilación (no crítico para PoC)
-- ✅ **macOS:** Debería funcionar (no completamente probado)
-- ❌ **Web:** No soportado (InAppWebView no funciona en Flutter Web)
 
-### Biometría Eliminada
-La autenticación biométrica fue eliminada para simplificar la PoC. Pueden existir referencias en la documentación pero la dependencia `local_auth` y código biométrico han sido removidos.
+**Nota:** Esta PoC está diseñada específicamente para **plataformas móviles** (Android e iOS). Flutter Web y desktop no están soportados.
 
 ### Principio de Diseño de Angular
 El MFE de Angular **NUNCA** debe:

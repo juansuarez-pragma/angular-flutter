@@ -57,11 +57,12 @@ flutter run
 # Para ejecutar en un dispositivo específico:
 # flutter run -d <device-id>
 
-# Ejemplos:
-# flutter run -d chrome          # Web
-# flutter run -d macos           # macOS
+# Ejemplos (solo plataformas móviles):
 # flutter run -d emulator-5554   # Android Emulator
-# flutter run -d iPhone-15       # iOS Simulator
+# flutter run -d "iPhone 16 Pro" # iOS Simulator
+
+# Para listar dispositivos disponibles:
+# flutter devices
 ```
 
 ## ✅ Verificación Rápida
@@ -106,9 +107,6 @@ open -a Simulator
 
 # Para Android Emulator
 emulator -avd <nombre-del-avd>
-
-# O usar Chrome (más rápido para pruebas)
-flutter run -d chrome
 ```
 
 ### Problema: "AppBridge is undefined"

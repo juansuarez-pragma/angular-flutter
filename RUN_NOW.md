@@ -16,7 +16,7 @@ npm start
 
 ```bash
 cd flutter_shell_orchestrator
-flutter run -d chrome
+flutter run  # O especifica dispositivo: -d emulator-5554 (Android) o -d "iPhone 16 Pro" (iOS)
 ```
 
 ✅ Espera ver: Aplicación Flutter con Angular cargado en el WebView
@@ -46,28 +46,24 @@ Una vez que ambas apps estén corriendo:
 
 ---
 
-## 📱 Plataformas Disponibles
+## 📱 Plataformas Móviles
 
-### Chrome (Recomendado)
-```bash
-flutter run -d chrome
-```
-- ⚡ Compilación instantánea
-- 🔥 Hot reload súper rápido
-- 🛠️ DevTools completos
+Esta PoC funciona en **Android e iOS** únicamente:
 
-### macOS
+### Android (Recomendado)
 ```bash
-flutter run -d macos
+flutter run -d emulator-5554  # Reemplaza con tu ID de emulador
 ```
-- 📱 Aplicación nativa de escritorio
-- ✅ Más rápido que iOS
+- ✅ 100% funcional
+- 🔥 Hot reload completo
+- **Importante:** Usa `10.0.2.2:4200` en el código para emulador
 
-### Web
+### iOS
 ```bash
-flutter run -d web-server
+flutter run -d "iPhone 16 Pro"  # Reemplaza con tu simulador
 ```
-- 🌐 Servidor web en puerto 8080
+- ⚠️ Puede tener problemas de compilación
+- Usa `localhost:4200` en el código
 
 ---
 
@@ -127,9 +123,10 @@ flutter run -d chrome
 ## 💡 Tips
 
 - **Hot Reload en Flutter:** Presiona `r` en la terminal
-- **DevTools:** Presiona `d` en la terminal de Flutter cuando esté en Chrome
+- **Hot Restart en Flutter:** Presiona `R` en la terminal (mayúscula)
 - **Ver solo Angular:** Abre `http://localhost:4200` en navegador normal
 - **Cerrar todo:** Ctrl+C en ambas terminales
+- **Listar dispositivos:** Ejecuta `flutter devices` para ver emuladores/simuladores disponibles
 
 ---
 
