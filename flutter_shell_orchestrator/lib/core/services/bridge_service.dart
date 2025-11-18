@@ -21,7 +21,7 @@ class BridgeService {
       return;
     }
 
-    final payload = {
+    final Map<String, String> payload = {
       'userName': userName,
       'timestamp': DateTime.now().toIso8601String(),
     };

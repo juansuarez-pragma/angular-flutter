@@ -128,14 +128,14 @@ ng build --configuration production
 **Angular → Flutter (enviar comandos):**
 - Angular llama `window.flutter_inappwebview.callHandler('AppBridge', message)`
 - Flutter recibe vía `addJavaScriptHandler('AppBridge', callback)`
-- Implementado en: `bridge.service.ts:sendMessage()` y `webview_host_screen.dart`
+- Implementado en: `bridge.service.ts:sendMessage()` (línea 61) y `webview_host_screen.dart:140`
 
 **Protocolo de Mensajes:**
 ```typescript
 // Angular → Flutter
 {
   event: 'UPDATE_NAME',  // Actualmente solo UPDATE_NAME está implementado
-  payload?: { ... }
+  payload?: { newName: string }
 }
 ```
 
@@ -170,7 +170,7 @@ const _mfeUrl = 'http://192.168.1.X:4200'; // Usa tu IP local
 
 **Configuración actual:** `webview_host_screen.dart:24` - Configurado para Android emulator (`10.0.2.2:4200`)
 
-**Para cambiar:** Edita la constante `_mfeUrl` en `lib/presentation/screens/webview_host_screen.dart` según tu plataforma de desarrollo.
+**Para cambiar:** Edita la constante `_mfeUrl` en `lib/presentation/screens/webview_host_screen.dart:24` según tu plataforma de desarrollo.
 
 ## Tecnologías Clave
 
@@ -189,7 +189,12 @@ const _mfeUrl = 'http://192.168.1.X:4200'; // Usa tu IP local
 
 ### Soporte de Plataformas
 - ✅ **Android:** Totalmente funcional (usa `10.0.2.2:4200` para emulador)
-- ⚠️ **iOS:** Existen problemas de compilación (no crítico para PoC)
+- ⚠️ **iOS Simulator:** Limitaciones conocidas de WKWebView con localhost
+  - WKWebView en iOS Simulator tiene restricciones con conexiones a localhost/127.0.0.1
+  - La aplicación se compila y ejecuta, pero el WebView puede no cargar contenido local
+  - **Solución:** Probar en dispositivo iOS físico donde funciona correctamente
+  - **Workaround temporal:** Usar IP de red local (ej: `192.168.1.5:4200`) pero puede seguir fallando en simulator
+- ✅ **iOS Dispositivo Físico:** Funciona correctamente (no probado en esta sesión)
 
 **Nota:** Esta PoC está diseñada específicamente para **plataformas móviles** (Android e iOS). Flutter Web y desktop no están soportados.
 
